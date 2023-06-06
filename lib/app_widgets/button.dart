@@ -5,7 +5,8 @@ class MyButton extends StatelessWidget {
   final String _buttonText;
   final double _height, _width, _borderRadius;
   const MyButton(
-      this._buttonText, this._height, this._width, this._borderRadius);
+      this._buttonText, this._height, this._width, this._borderRadius,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class MyButton extends StatelessWidget {
       width: _width,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: Colors.blue,
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
       child: HeadingText(_buttonText, _height / 2.5, null, Colors.white),

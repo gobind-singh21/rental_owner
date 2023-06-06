@@ -96,6 +96,7 @@ class Auth {
         'name': name,
         'number': number,
         'profileImageURL': profileImageURL,
+        'productIDs': FieldValue.arrayUnion([]),
       };
       await owners.doc(userCredential.user!.uid).set(userData);
       setUserData(

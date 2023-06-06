@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
     Dimensions.screenWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // themeMode: ThemeMode.light,
-      // theme: ThemeData(
-      //   primaryColor: Colors.blue,
-      //   // fontFamily: GoogleFonts.lato().fontFamily,
-      // ),
+      themeMode: ThemeMode.light,
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        // fontFamily: GoogleFonts.lato().fontFamily,
+      ),
       darkTheme: ThemeData(brightness: Brightness.dark),
       home: (currentFirebaseUser == null) ? const LoginScreen() : HomeScreen(),
     );

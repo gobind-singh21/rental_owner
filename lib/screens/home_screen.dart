@@ -3,9 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rental_owner/screens/login_screen.dart';
+import 'package:rental_owner/screens/product_screens/add_product_screens/add_product_screen.dart';
+// import 'package:rental_owner/screens/login_screen.dart';
 import 'package:rental_owner/screens/profile_screen.dart';
-import 'package:rental_owner/utils/auth.dart';
+// import 'package:rental_owner/utils/auth.dart';
 import 'package:rental_owner/global/global.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,8 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final String name = OwnerData.name;
-  // String profileImageURL = OwnerData.profileImageURL;
-  // String? firstName;
 
   asyncMethod() async {
     await OwnerData.setOwnerData();
@@ -32,31 +31,35 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!OwnerData.ownerDataSet) {
       asyncMethod();
     }
-    // OwnerData.setOwnerData();
-    // int index = name.indexOf(' ');
-    // if (index > 0) {
-    //   firstName = name.substring(0, name.indexOf(' '));
-    // } else {
-    //   firstName = name;
-    // }
-    // profileImageURL = OwnerData.profileImageURL;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Auth().signOut();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-            ModalRoute.withName('name'),
-          );
-        },
-        backgroundColor: Colors.blueAccent.shade100,
-        child: const Icon(Icons.logout),
+      floatingActionButton: InkWell(
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => AddProductScreen())),
+        child: Container(
+          height: Dimensions.screenHeight / 15,
+          width: Dimensions.screenHeight / 15,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Dimensions.screenWidth),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 0, 100, 255),
+                Colors.blue,
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+          child: const Icon(
+            Icons.add_rounded,
+            color: Colors.white,
+            size: 40,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -67,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
               gradient: LinearGradient(
                 colors: [
                   Colors.blue,
-                  Color.fromARGB(255, 0, 64, 255),
+                  Color.fromARGB(255, 0, 0, 255),
                 ],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
@@ -119,28 +122,37 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context) => ProfileScreen(),
                           ),
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: FutureBuilder<void>(
-                            future: asyncMethod(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Icon(
-                                  Icons.account_box_rounded,
-                                  color: Colors.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blue.shade300,
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: FutureBuilder<void>(
+                              future: asyncMethod(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Icon(
+                                    Icons.account_box_rounded,
+                                    color: Colors.white,
+                                  );
+                                } else if (snapshot.hasError) {
+                                  Fluttertoast.showToast(
+                                      msg: '${snapshot.error}');
+                                  return const Icon(
+                                      Icons.network_locked_outlined);
+                                }
+                                return Image.network(
+                                  OwnerData.profileImageURL,
+                                  height: Dimensions.screenHeight / 15,
                                 );
-                              } else if (snapshot.hasError) {
-                                Fluttertoast.showToast(
-                                    msg: '${snapshot.error}');
-                                return const Icon(
-                                    Icons.network_locked_outlined);
-                              }
-                              return Image.network(
-                                OwnerData.profileImageURL,
-                                height: Dimensions.screenHeight / 15,
-                              );
-                            },
+                              },
+                            ),
                           ),
                         ),
                       )

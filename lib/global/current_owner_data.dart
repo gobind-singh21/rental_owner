@@ -5,6 +5,7 @@ class OwnerData {
   static String email = "";
   static String number = "";
   static String profileImageURL = "";
+  static List<dynamic> productUID = [];
   static bool ownerDataSet = false;
 
   static setOwnerData() async {
@@ -15,6 +16,7 @@ class OwnerData {
     email = data['email'];
     number = data['number'];
     profileImageURL = data['profileImageURL'];
+    productUID = data['productUIDs'];
     ownerDataSet = true;
   }
 }

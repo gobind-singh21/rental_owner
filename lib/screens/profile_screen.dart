@@ -27,43 +27,80 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left_rounded,
+            color: Colors.black,
+            size: 35,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ProfileHeader(),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              ProfileHeader(),
+              const SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditProfileScreen(),
+                    ),
+                  );
+                },
+                child: ProfileItem(
+                  const Icon(
+                    Icons.person_outline,
+                    // color: Colors.black,
                   ),
-                );
-              },
-              child: ProfileItem(
-                const Icon(Icons.person_outline),
-                'Account',
+                  'Account',
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SettingsScreen()),
-                );
-              },
-              child: ProfileItem(
-                const Icon(Icons.settings_outlined),
-                'Settings',
+              const SizedBox(
+                height: 20,
               ),
-            ),
-            InkWell(
-              onTap: () {
-                signOut(context);
-              },
-              child: ProfileItem(const Icon(Icons.logout_outlined), 'Log out'),
-            ),
-          ],
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => SettingsScreen()),
+                  );
+                },
+                child: ProfileItem(
+                  const Icon(
+                    Icons.settings_outlined,
+                    // color: Colors.black,
+                  ),
+                  'Settings',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () {
+                  signOut(context);
+                },
+                child: ProfileItem(
+                    const Icon(
+                      Icons.logout_outlined,
+                      // color: Colors.black,
+                    ),
+                    'Log out'),
+              ),
+            ],
+          ),
         ),
       ),
     );

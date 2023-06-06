@@ -13,12 +13,14 @@ class ProfileItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-        ),
+        borderRadius: BorderRadius.circular(width),
+        color: Colors.grey.shade100,
       ),
       height: height / 15,
-      padding: EdgeInsets.only(left: width / 80),
+      padding: EdgeInsets.only(
+        left: width / 20,
+        right: width / 20,
+      ),
       child: Row(
         children: [
           _icon,
@@ -29,7 +31,13 @@ class ProfileItem extends StatelessWidget {
             _title,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
+              // color: Colors.black,
             ),
+          ),
+          const Expanded(child: SizedBox()),
+          const Icon(
+            Icons.chevron_right_rounded,
+            // color: Colors.black,
           ),
         ],
       ),
