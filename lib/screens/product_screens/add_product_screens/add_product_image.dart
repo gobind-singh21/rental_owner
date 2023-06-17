@@ -1,10 +1,9 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:rental_owner/app_widgets/text_widgets/heading_text.dart';
+import 'package:rental_owner/app_widgets/text_widgets/heading_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:rental_owner/app_widgets/button.dart';
-import 'package:rental_owner/app_widgets/text_widgets/heading_text.dart';
 import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:rental_owner/global/global.dart';
@@ -128,16 +127,12 @@ class _AddProductImageState extends State<AddProductImage> {
     for (var imageFile in productImageFiles) {
       final String fileName =
           '${DateTime.now().millisecondsSinceEpoch}_${imageFile.path.split('/').last}';
-      Reference storageRef = FirebaseStorage.instance
-          .ref()
-          .child('$directoryAddress/$fileName.jpg');
+      Reference storageRef =
+          FirebaseStorage.instance.ref().child('$directoryAddress/$fileName');
       TaskSnapshot uploadTask = await storageRef.putFile(imageFile);
       final String downloadURL = await uploadTask.ref.getDownloadURL();
       downloadURLs.add(downloadURL);
     }
-    // final List<String> description =
-    //     _descriptionController.text.trim().split('\n');
-    // final products = db.collection('products');
     final String productID = "${DateTime.now().microsecondsSinceEpoch}";
     OwnerData.productUID.add(productID);
     NewProductInfo.description = _descriptionController.text.trim().split('\n');
@@ -156,7 +151,7 @@ class _AddProductImageState extends State<AddProductImage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(),
+              builder: (context) => const HomeScreen(),
             ),
             ModalRoute.withName('name'),
           );

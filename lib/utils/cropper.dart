@@ -5,7 +5,7 @@ class Cropper {
   static Future<File> cropSquareImage(File imageFile) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       compressFormat: ImageCompressFormat.jpg,
-      compressQuality: 50,
+      compressQuality: 20,
       sourcePath: imageFile.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
@@ -13,7 +13,7 @@ class Cropper {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',
-          lockAspectRatio: false,
+          lockAspectRatio: true,
         )
       ],
     );

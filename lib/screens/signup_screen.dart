@@ -160,7 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: _numberController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         hintText: "Enter phone number",
                         labelText: "Phone Number",
@@ -175,8 +175,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Phone number cannot be empty";
-                        } else if (value.length < 10) {
-                          return "Password must be atleast 10 characters long";
+                        } else if (value.length != 10) {
+                          return "Invalid phone number";
                         }
                         return null;
                       },

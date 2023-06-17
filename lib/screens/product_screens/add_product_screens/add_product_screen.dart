@@ -18,14 +18,12 @@ class AddProductScreen extends StatefulWidget {
 class _AddProductScreenState extends State<AddProductScreen> {
   final double height = Dimensions.screenHeight;
   final double width = Dimensions.screenWidth;
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _productName = TextEditingController();
   final TextEditingController _productPrice = TextEditingController();
 
   void moveToNextStep() {
-    // print('entered function');
-    if (_formkey.currentState!.validate()) {
-      // print('entered conidition');
+    if (_formKey.currentState!.validate()) {
       NewProductInfo.name = _productName.text.trim();
       NewProductInfo.ownerID = currentFirebaseUser!.uid;
       NewProductInfo.pricePerHour = double.parse(_productPrice.text.trim());
@@ -61,7 +59,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       body: Column(
         children: [
           Form(
-            key: _formkey,
+            key: _formKey,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Dimensions.screenHeight / 54.8125,
@@ -70,6 +68,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               child: Column(
                 children: [
                   TextFormField(
+                    keyboardType: TextInputType.name,
                     controller: _productName,
                     decoration: InputDecoration(
                       labelText: 'Product name',
@@ -92,10 +91,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: _productPrice,
                     decoration: InputDecoration(
                       labelText: 'Price / hr',

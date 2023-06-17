@@ -4,33 +4,45 @@ import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rental_owner/screens/product_screens/add_product_screens/add_product_screen.dart';
-// import 'package:rental_owner/screens/login_screen.dart';
+import 'package:rental_owner/screens/product_screens/show_all_product_screen/show_all_products.dart';
 import 'package:rental_owner/screens/profile_screen.dart';
-// import 'package:rental_owner/utils/auth.dart';
 import 'package:rental_owner/global/global.dart';
+import 'package:rental_owner/screens/revenue_screens/total_revenue_screen.dart';
+import '../utils/data_fetch.dart';
 
-class HomeScreen extends StatefulWidget {
+double height = Dimensions.screenHeight;
+double width = Dimensions.screenWidth;
+double todayRevenue = 0.0;
+
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final String name = OwnerData.name;
-
-  asyncMethod() async {
-    await OwnerData.setOwnerData();
+  Future calculateTodayRevenue() async {
+    final DateTime now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    for(var product in OwnerData.productUID) {
+      // Map<String, dynamic> prodData = await GetData.fetchProduct(product);
+      final List<dynamic> history = (await GetData.fetchProduct(product))['history'];
+      for(var orderID in history) {
+        final Map<String, dynamic> orderInfo = await GetData.fetchOrderInfo(orderID);
+        if(orderInfo['endTimeStamp'] != null) {
+          DateTime endTime = DateTime.fromMicrosecondsSinceEpoch(orderInfo['endTimeStamp']);
+          DateTime endDate = DateTime(endTime.year, endTime.month, endTime.day);
+          if(today == endDate) {
+            todayRevenue += orderInfo['pricePaid'];
+          }
+        }
+      }
+    }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  Future asyncMethod() async {
     profileImagePath =
         'owners/${currentFirebaseUser!.uid}/profile_images/profile.jpg';
     if (!OwnerData.ownerDataSet) {
-      asyncMethod();
+      await OwnerData.setOwnerData();
     }
+    await calculateTodayRevenue();
   }
 
   @override
@@ -39,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey.shade100,
       floatingActionButton: InkWell(
         onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => AddProductScreen())),
+            MaterialPageRoute(builder: (context) => const AddProductScreen())),
         child: Container(
           height: Dimensions.screenHeight / 15,
           width: Dimensions.screenHeight / 15,
@@ -65,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             height: Dimensions.screenHeight / 2.5,
+            width: width,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
               gradient: LinearGradient(
@@ -83,93 +96,97 @@ class _HomeScreenState extends State<HomeScreen> {
                 right: 40,
                 bottom: 60,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      FutureBuilder(
-                        future: asyncMethod(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Text(
-                              "Hello!",
-                              style: TextStyle(
+              child: FutureBuilder(
+                future: asyncMethod(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    Fluttertoast.showToast(msg: 'Error occurred try again later!');
+                    return Center(
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.error_rounded,
+                            color: Colors.grey,
+                            size: 50,
+                          ),
+                          SizedBox(
+                            height: height / 80,
+                          ),
+                          const Text(
+                            'Error occurred try again later...',
+                            style: TextStyle(
+                              fontSize: 35,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Hello ${OwnerData.name}',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                               ),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const AlertDialog(
-                              title: Text("Error occured"),
-                            );
-                          }
-                          return Text(
-                            "Hello ${OwnerData.name}!",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
                             ),
-                          );
-                        },
-                      ),
-                      const Expanded(child: SizedBox()),
-                      InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(),
+                            const Expanded(
+                              child: SizedBox(),
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(),
+                                ),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.blue.shade300,
+                                    width: 3,
+                                  ),
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    OwnerData.profileImageURL,
+                                    height: height / 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: height / 10,
+                        ),
+                        const Text(
+                          "Today's revenue",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
                           ),
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.blue.shade300,
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: FutureBuilder<void>(
-                              future: asyncMethod(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Icon(
-                                    Icons.account_box_rounded,
-                                    color: Colors.white,
-                                  );
-                                } else if (snapshot.hasError) {
-                                  Fluttertoast.showToast(
-                                      msg: '${snapshot.error}');
-                                  return const Icon(
-                                      Icons.network_locked_outlined);
-                                }
-                                return Image.network(
-                                  OwnerData.profileImageURL,
-                                  height: Dimensions.screenHeight / 15,
-                                );
-                              },
-                            ),
+                        Text(
+                          "\u{20B9} $todayRevenue",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: Dimensions.screenHeight / 10,
-                  ),
-                  const Text(
-                    "Today's revenue",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                  const Text(
-                    "\u{20B9}",
-                    style: TextStyle(color: Colors.white, fontSize: 40),
-                  ),
-                ],
+                      ],
+                    );
+                  }
+                },
               ),
             ),
           ),
@@ -239,60 +256,68 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const Expanded(child: SizedBox()),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  height: Dimensions.screenHeight / 5,
-                  width: Dimensions.screenHeight / 5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                      ),
-                    ],
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ShowAllProducts(),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color.fromARGB(255, 255, 230, 0),
-                              Colors.yellow.shade100,
-                            ],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                          ),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    height: Dimensions.screenHeight / 5,
+                    width: Dimensions.screenHeight / 5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
                         ),
-                        child: const CircleAvatar(
-                          radius: 23,
-                          backgroundColor: Colors.transparent,
-                          child: Icon(
-                            FontAwesomeIcons.box,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Expanded(child: SizedBox()),
-                      const Row(
-                        children: [
-                          Text(
-                            "Products",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                const Color.fromARGB(255, 255, 230, 0),
+                                Colors.yellow.shade100,
+                              ],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
                             ),
                           ),
-                          Expanded(child: SizedBox()),
-                          Icon(Icons.chevron_right_rounded)
-                        ],
-                      ),
-                    ],
+                          child: const CircleAvatar(
+                            radius: 23,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              FontAwesomeIcons.box,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const Expanded(child: SizedBox()),
+                        const Row(
+                          children: [
+                            Text(
+                              "Products",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Icon(Icons.chevron_right_rounded)
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -364,60 +389,68 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const Expanded(child: SizedBox()),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  height: Dimensions.screenHeight / 5,
-                  width: Dimensions.screenHeight / 5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                      ),
-                    ],
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TotalRevenueScreen(),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.green,
-                              Colors.green.shade100,
-                            ],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                          ),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    height: Dimensions.screenHeight / 5,
+                    width: Dimensions.screenHeight / 5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
                         ),
-                        child: const CircleAvatar(
-                          radius: 22,
-                          backgroundColor: Colors.transparent,
-                          child: Icon(
-                            Icons.currency_rupee_rounded,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Expanded(child: SizedBox()),
-                      const Row(
-                        children: [
-                          Text(
-                            "Net revenue",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.green,
+                                Colors.green.shade100,
+                              ],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
                             ),
                           ),
-                          Expanded(child: SizedBox()),
-                          Icon(Icons.chevron_right_rounded)
-                        ],
-                      ),
-                    ],
+                          child: const CircleAvatar(
+                            radius: 22,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              Icons.currency_rupee_rounded,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const Expanded(child: SizedBox()),
+                        const Row(
+                          children: [
+                            Text(
+                              "Net revenue",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Icon(Icons.chevron_right_rounded)
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

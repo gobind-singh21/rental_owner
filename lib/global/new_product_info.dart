@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rental_owner/global/current_Owner_data.dart';
 import 'package:rental_owner/global/global.dart';
 
 class NewProductInfo {
@@ -16,13 +17,14 @@ class NewProductInfo {
       'productImageURLs': FieldValue.arrayUnion(productImageURLs),
       'ownerID': ownerID,
       'description': FieldValue.arrayUnion(description),
+      'rating': 0.0,
+      'numberOfReviews': 0,
+      'history': FieldValue.arrayUnion([]),
+      'top': false,
+      'totalRevenue': 0.0
     });
     final ownerDocRef = db.collection('owners').doc(currentFirebaseUser!.uid);
-    final doc = await ownerDocRef.get();
-    final dataMap = doc.data() as Map<String, dynamic>;
-    // final dataMap = await ownerRef.doc(currentFirebaseUser!.uid).get();
-    final List<dynamic> productUIDs = dataMap['productUIDs'];
-    productUIDs.add(productID);
-    ownerDocRef.update({'productUIDs': productUIDs});
+    OwnerData.productUID.add(productID);
+    await ownerDocRef.update({'productUIDs': FieldValue.arrayUnion(OwnerData.productUID)});
   }
 }
