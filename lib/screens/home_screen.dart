@@ -21,7 +21,6 @@ class HomeScreen extends StatelessWidget {
     final DateTime now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     for(var product in OwnerData.productUID) {
-      // Map<String, dynamic> prodData = await GetData.fetchProduct(product);
       final List<dynamic> history = (await GetData.fetchProduct(product))['history'];
       for(var orderID in history) {
         final Map<String, dynamic> orderInfo = await GetData.fetchOrderInfo(orderID);
