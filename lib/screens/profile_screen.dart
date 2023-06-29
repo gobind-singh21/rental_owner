@@ -30,17 +30,17 @@ class ProfileScreen extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
-            color: Colors.black,
             size: 35,
+            color: Theme.of(context).iconTheme.color,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -55,14 +55,13 @@ class ProfileScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => EditProfileScreen(),
+                      builder: (_) => const EditProfileScreen(),
                     ),
                   );
                 },
                 child: ProfileItem(
                   const Icon(
                     Icons.person_outline,
-                    // color: Colors.black,
                   ),
                   'Account',
                 ),
@@ -74,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => SettingsScreen()),
+                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
                   );
                 },
                 child: ProfileItem(

@@ -47,7 +47,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
       floatingActionButton: InkWell(
         onTap: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AddProductScreen())),
@@ -55,19 +54,11 @@ class HomeScreen extends StatelessWidget {
           height: Dimensions.screenHeight / 15,
           width: Dimensions.screenHeight / 15,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.screenWidth),
-            gradient: const LinearGradient(
-              colors: [
-                Color.fromARGB(255, 0, 100, 255),
-                Colors.blue,
-              ],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-            ),
+            shape: BoxShape.circle,
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
           ),
           child: const Icon(
             Icons.add_rounded,
-            color: Colors.white,
             size: 40,
           ),
         ),
@@ -77,12 +68,12 @@ class HomeScreen extends StatelessWidget {
           Container(
             height: Dimensions.screenHeight / 2.5,
             width: width,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50)),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(50)),
               gradient: LinearGradient(
                 colors: [
-                  Colors.blue,
-                  Color.fromARGB(255, 0, 0, 255),
+                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.primary,
                 ],
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
@@ -105,19 +96,19 @@ class HomeScreen extends StatelessWidget {
                     return Center(
                       child: Column(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.error_rounded,
-                            color: Colors.grey,
+                            color: Theme.of(context).colorScheme.error,
                             size: 50,
                           ),
                           SizedBox(
                             height: height / 80,
                           ),
-                          const Text(
+                          Text(
                             'Error occurred try again later...',
                             style: TextStyle(
                               fontSize: 35,
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.bodyLarge!.color,
                             ),
                           ),
                         ],
@@ -131,9 +122,10 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Hello ${OwnerData.name}',
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.displayMedium!.color,
                                 fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             const Expanded(
@@ -149,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.blue.shade300,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     width: 3,
                                   ),
                                   borderRadius: BorderRadius.circular(18),
@@ -204,13 +196,7 @@ class HomeScreen extends StatelessWidget {
                   width: Dimensions.screenHeight / 5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                      ),
-                    ],
+                    color: Theme.of(context).cardColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,35 +206,36 @@ class HomeScreen extends StatelessWidget {
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: [
-                              Colors.blue,
-                              Colors.blue.shade200,
+                              Colors.blue.shade600,
+                              Colors.blue.shade300,
                             ],
                             begin: Alignment.bottomLeft,
                             end: Alignment.topRight,
                           ),
                         ),
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           radius: 22,
                           backgroundColor: Colors.transparent,
                           child: Icon(
                             Icons.people_rounded,
-                            color: Colors.black,
+                            color: Theme.of(context).iconTheme.color,
+                            // color: Colors.black,
                           ),
                         ),
                       ),
                       const Expanded(child: SizedBox()),
-                      const Row(
+                      Row(
                         children: [
                           Text(
                             "Customers",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Expanded(child: SizedBox()),
-                          Icon(Icons.chevron_right_rounded)
+                          const Expanded(child: SizedBox()),
+                          const Icon(Icons.chevron_right_rounded)
                         ],
                       ),
                     ],
@@ -268,13 +255,7 @@ class HomeScreen extends StatelessWidget {
                     width: Dimensions.screenHeight / 5,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                        ),
-                      ],
+                      color: Theme.of(context).cardColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,35 +265,35 @@ class HomeScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
                               colors: [
-                                const Color.fromARGB(255, 255, 230, 0),
-                                Colors.yellow.shade100,
+                                Colors.yellow.shade800,
+                                Colors.yellow.shade600,
                               ],
                               begin: Alignment.bottomLeft,
                               end: Alignment.topRight,
                             ),
                           ),
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 23,
                             backgroundColor: Colors.transparent,
                             child: Icon(
                               FontAwesomeIcons.box,
-                              color: Colors.black,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        const Row(
+                        Row(
                           children: [
                             Text(
                               "Products",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Expanded(child: SizedBox()),
-                            Icon(Icons.chevron_right_rounded)
+                            const Expanded(child: SizedBox()),
+                            const Icon(Icons.chevron_right_rounded)
                           ],
                         ),
                       ],
@@ -337,51 +318,45 @@ class HomeScreen extends StatelessWidget {
                   width: Dimensions.screenHeight / 5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                      ),
-                    ],
+                    color: Theme.of(context).cardColor,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: [
-                              Colors.redAccent,
-                              Color.fromARGB(255, 255, 205, 200),
+                              Colors.red.shade500,
+                              Colors.red.shade300,
                             ],
                             begin: Alignment.bottomLeft,
                             end: Alignment.topRight,
                           ),
                         ),
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           radius: 22,
                           backgroundColor: Colors.transparent,
                           child: Icon(
                             Icons.insert_chart_rounded,
-                            color: Colors.black,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                         ),
                       ),
                       const Expanded(child: SizedBox()),
-                      const Row(
+                      Row(
                         children: [
                           Text(
                             "Statistics",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Expanded(child: SizedBox()),
-                          Icon(Icons.chevron_right_rounded)
+                          const Expanded(child: SizedBox()),
+                          const Icon(Icons.chevron_right_rounded)
                         ],
                       ),
                     ],
@@ -401,13 +376,7 @@ class HomeScreen extends StatelessWidget {
                     width: Dimensions.screenHeight / 5,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                        ),
-                      ],
+                      color: Theme.of(context).cardColor,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,35 +386,35 @@ class HomeScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
                               colors: [
-                                Colors.green,
-                                Colors.green.shade100,
+                                Colors.green.shade500,
+                                Colors.green.shade300,
                               ],
                               begin: Alignment.bottomLeft,
                               end: Alignment.topRight,
                             ),
                           ),
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 22,
                             backgroundColor: Colors.transparent,
                             child: Icon(
                               Icons.currency_rupee_rounded,
-                              color: Colors.black,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
                         ),
                         const Expanded(child: SizedBox()),
-                        const Row(
+                        Row(
                           children: [
                             Text(
                               "Net revenue",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Theme.of(context).textTheme.bodyLarge!.color,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Expanded(child: SizedBox()),
-                            Icon(Icons.chevron_right_rounded)
+                            const Expanded(child: SizedBox()),
+                            const Icon(Icons.chevron_right_rounded)
                           ],
                         ),
                       ],

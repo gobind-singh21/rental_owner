@@ -15,16 +15,21 @@ class ShowAllProducts extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
             size: 35,
-            color: Colors.black,
+            color: Theme.of(context).iconTheme.color,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        title: const HeadingText('All products', 25, null, Colors.black),
+        // backgroundColor: Colors.transparent,
+        // shadowColor: Colors.transparent,
+        title: HeadingText(
+          'Products',
+          25,
+          null,
+          Theme.of(context).textTheme.bodyLarge!.color,
+        ),
       ),
       body: SizedBox(
         height: height,

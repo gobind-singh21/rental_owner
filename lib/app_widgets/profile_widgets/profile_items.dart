@@ -14,7 +14,7 @@ class ProfileItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(width),
-        color: Colors.grey.shade100,
+        color: Theme.of(context).cardColor,
       ),
       height: height / 15,
       padding: EdgeInsets.only(
@@ -29,8 +29,9 @@ class ProfileItem extends StatelessWidget {
           ),
           Text(
             _title,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
               // color: Colors.black,
             ),
           ),
