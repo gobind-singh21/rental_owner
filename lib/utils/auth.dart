@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/global.dart';
-// import 'package:rental_owner/models/user_class.dart';
 import 'package:rental_owner/screens/home_screen.dart';
-// import 'package:rental_owner/screens/login_screen.dart';
 
 class Auth {
   void setUserData(

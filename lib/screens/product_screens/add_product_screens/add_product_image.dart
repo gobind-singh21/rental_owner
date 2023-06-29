@@ -44,16 +44,16 @@ class _AddProductImageState extends State<AddProductImage> {
             )
           ],
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.image_not_supported,
               size: 50,
-              color: Colors.black,
+              color: Theme.of(context).iconTheme.color,
             ),
-            SizedBox(height: 10),
-            HeadingText('No image added', 20, null, Colors.black),
+            const SizedBox(height: 10),
+            HeadingText('No image added', 20, null, Theme.of(context).textTheme.bodyLarge!.color),
           ],
         ),
       );
@@ -160,10 +160,10 @@ class _AddProductImageState extends State<AddProductImage> {
       ),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
             size: 35,
-            color: Colors.black,
+            color: Theme.of(context).iconTheme.color,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -188,11 +188,11 @@ class _AddProductImageState extends State<AddProductImage> {
           SizedBox(
             height: height / 80,
           ),
-          const HeadingText(
+          HeadingText(
             'Enter product description',
             20,
             null,
-            Colors.black,
+            Theme.of(context).textTheme.bodyLarge!.color,
           ),
           SizedBox(
             height: height / 80,

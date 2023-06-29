@@ -21,13 +21,13 @@ class ListItem extends StatelessWidget {
             width: width / 3.425,
             height: width / 3.425,
             decoration: BoxDecoration(
-              boxShadow: const [
-                BoxShadow(
-                  color: Color.fromARGB(108, 93, 93, 93),
-                  offset: Offset(1, 5),
-                  blurRadius: 4,
-                ),
-              ],
+              // boxShadow: const [
+              //   BoxShadow(
+              //     color: Color.fromARGB(108, 93, 93, 93),
+              //     offset: Offset(1, 5),
+              //     blurRadius: 4,
+              //   ),
+              // ],
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(height / 43.85),
                 bottomLeft: Radius.circular(height / 43.85),
@@ -53,14 +53,14 @@ class ListItem extends StatelessWidget {
                   topRight: Radius.circular(height / 43.85),
                   bottomRight: Radius.circular(height / 43.85),
                 ),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(108, 93, 93, 93),
-                    offset: Offset(1, 5),
-                    blurRadius: 4,
-                  )
-                ],
+                color: Theme.of(context).cardColor,
+                // boxShadow: const [
+                //   BoxShadow(
+                //     color: Color.fromARGB(108, 93, 93, 93),
+                //     offset: Offset(1, 5),
+                //     blurRadius: 4,
+                //   )
+                // ],
               ),
               child: Padding(
                 padding: EdgeInsets.all(height / 87.7),
@@ -73,7 +73,7 @@ class ListItem extends StatelessWidget {
                           map['name'],
                           15,
                           TextOverflow.ellipsis,
-                          Colors.black,
+                          Theme.of(context).textTheme.bodyLarge!.color,
                         ),
                         const SizedBox(
                           width: 4,
@@ -110,9 +110,9 @@ class ListItem extends StatelessWidget {
                     ),
                     Text(
                       "\u{20B9}${map['pricePerHour']} / hr",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

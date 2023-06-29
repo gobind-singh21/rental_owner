@@ -29,10 +29,11 @@ class ProfileHeader extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: height / 45,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
               // color: Colors.black,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -40,7 +41,8 @@ class ProfileHeader extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: height / 55,
-              color: Colors.grey,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
+              // color: Colors.grey,
             ),
           )
         ],

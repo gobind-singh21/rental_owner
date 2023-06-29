@@ -19,20 +19,20 @@ class TotalRevenueScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
             size: 35,
-            color: Colors.black,
+            color: Theme.of(context).iconTheme.color,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        title: const HeadingText(
-          'History',
+        // backgroundColor: Colors.transparent,
+        // shadowColor: Colors.transparent,
+        title: HeadingText(
+          'Total Revenue',
           20,
           null,
-          Colors.black,
+          Theme.of(context).textTheme.bodyLarge!.color,
         ),
       ),
       body: ListView.builder(
@@ -62,13 +62,6 @@ class TotalRevenueScreen extends StatelessWidget {
                       width: width / 3.425,
                       height: width / 3.425,
                       decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromARGB(108, 93, 93, 93),
-                            offset: Offset(1, 5),
-                            blurRadius: 4,
-                          ),
-                        ],
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(height / 43.85),
                           bottomLeft: Radius.circular(height / 43.85),
@@ -94,14 +87,7 @@ class TotalRevenueScreen extends StatelessWidget {
                             topRight: Radius.circular(height / 43.85),
                             bottomRight: Radius.circular(height / 43.85),
                           ),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(108, 93, 93, 93),
-                              offset: Offset(1, 5),
-                              blurRadius: 4,
-                            )
-                          ],
+                          color: Theme.of(context).cardColor,
                         ),
                         child: Padding(
                           padding: EdgeInsets.only(
@@ -114,8 +100,12 @@ class TotalRevenueScreen extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  HeadingText(prodData['name'], 15,
-                                      TextOverflow.ellipsis, Colors.black),
+                                  HeadingText(
+                                    prodData['name'],
+                                    15,
+                                    TextOverflow.ellipsis,
+                                    Theme.of(context).textTheme.bodyLarge!.color,
+                                  ),
                                   const SizedBox(
                                     width: 4,
                                   ),
@@ -151,9 +141,9 @@ class TotalRevenueScreen extends StatelessWidget {
                               ),
                               Text(
                                 "\u{20B9}${prodData['pricePerHour']} / hr",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 17,
-                                  color: Colors.black,
+                                  color: Theme.of(context).textTheme.bodyLarge!.color,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -163,8 +153,8 @@ class TotalRevenueScreen extends StatelessWidget {
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(colors: [
-                                      Colors.blue.shade600,
-                                      Colors.blue.shade300,
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.secondary,
                                     ]),
                                     // color: Colors.blue.shade400,
                                     borderRadius: BorderRadius.only(
@@ -174,9 +164,9 @@ class TotalRevenueScreen extends StatelessWidget {
                                   ),
                                   child: Text(
                                     'Total Revenue : ${prodData['totalRevenue']}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Theme.of(context).textTheme.displayMedium!.color,
                                     ),
                                   ),
                                 ),

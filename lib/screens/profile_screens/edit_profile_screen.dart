@@ -70,7 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     TextEditingController passwordController = TextEditingController();
 
     AlertDialog alert = AlertDialog(
-      title: const HeadingText('Enter your password', 20, null, Colors.black),
+      title: HeadingText('Enter your password', 20, null, Theme.of(context).textTheme.bodyLarge!.color,),
       content: TextField(
         scrollPhysics: const BouncingScrollPhysics(),
         controller: passwordController,
@@ -141,6 +141,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left_rounded, size: 35,),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.transparent,
+      ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -197,7 +205,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: height * 0.05,
                       width: height * 0.05,
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(width / 30),
                       ),
                       child: IconButton(
@@ -216,89 +224,123 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 )
               ],
             ),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    textCapitalization: TextCapitalization.words,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      hintText: "Enter user name",
-                      labelText: "User name",
-                      prefixIcon: Icon(
-                        Icons.person_outline,
-                        size: height / 29.2333,
+            Padding(
+              padding: EdgeInsets.all(height / 30),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                      textCapitalization: TextCapitalization.words,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        focusColor: Theme.of(context).colorScheme.secondary,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        // focusColor: Theme.of(context).colorScheme.secondary,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        hintText: "Enter user name",
+                        labelText: "User name",
+                        prefixIcon: Icon(
+                          Icons.person_outline,
+                          size: height / 29.2333,
+                        ),
+                        labelStyle: TextStyle(
+                          fontSize: height / 54.8125,
+                        ),
+                        hintStyle: TextStyle(
+                          fontSize: height / 53,
+                        ),
                       ),
-                      labelStyle: TextStyle(
-                        fontSize: height / 54.8125,
-                      ),
-                      hintStyle: TextStyle(
-                        fontSize: height / 53,
-                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "User name cannot be empty";
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "User name cannot be empty";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: height / 87.7,
-                  ),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: "Enter Email",
-                      labelText: "Email",
-                      prefixIcon: Icon(
-                        Icons.mail_outline,
-                        size: height / 29.2333,
-                      ),
-                      labelStyle: TextStyle(
-                        fontSize: height / 54.8125,
-                      ),
+                    SizedBox(
+                      height: height / 50,
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Email cannot be empty";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: height / 87.7,
-                  ),
-                  TextFormField(
-                    controller: _numberController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: "Enter phone number",
-                      labelText: "Phone Number",
-                      prefixIcon: Icon(
-                        Icons.phone_outlined,
-                        size: height / 29.2333,
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        focusColor: Theme.of(context).colorScheme.secondary,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        hintText: "Enter Email",
+                        labelText: "Email",
+                        prefixIcon: Icon(
+                          Icons.mail_outline,
+                          size: height / 29.2333,
+                        ),
+                        labelStyle: TextStyle(
+                          fontSize: height / 54.8125,
+                        ),
                       ),
-                      labelStyle: TextStyle(
-                        fontSize: height / 54.8125,
-                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Email cannot be empty";
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Phone number cannot be empty";
-                      } else if (value.length < 10) {
-                        return "Password must be at least 10 characters long";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: height / 87.7,
-                  ),
-                ],
+                    SizedBox(
+                      height: height / 50,
+                    ),
+                    TextFormField(
+                      controller: _numberController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        focusColor: Theme.of(context).colorScheme.secondary,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        hintText: "Enter phone number",
+                        labelText: "Phone Number",
+                        prefixIcon: Icon(
+                          Icons.phone_outlined,
+                          size: height / 29.2333,
+                        ),
+                        labelStyle: TextStyle(
+                          fontSize: height / 54.8125,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Phone number cannot be empty";
+                        } else if (value.length < 10) {
+                          return "Password must be at least 10 characters long";
+                        }
+                        return null;
+                      },
+                    ),
+                    // SizedBox(
+                    //   height: height / 80,
+                    // ),
+                  ],
+                ),
               ),
             )
           ],

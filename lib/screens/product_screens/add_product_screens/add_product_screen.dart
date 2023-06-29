@@ -44,15 +44,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
         child: MyButton('Next', width / 10, height / 10, 10),
       ),
       appBar: AppBar(
-        title: const HeadingText('Add product', 20, null, Colors.black),
+        title: HeadingText(
+          'Add product',
+          20,
+          null,
+          Theme.of(context).textTheme.bodyLarge!.color,
+        ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
             size: 35,
-            color: Colors.black,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
       ),
