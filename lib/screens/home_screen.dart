@@ -20,9 +20,9 @@ class HomeScreen extends StatelessWidget {
     double todayRevenue = 0.0;
     final DateTime now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    print('function');
+    // print('function');
     try {
-      print(OwnerData.productUID.length);
+      // print(OwnerData.productUID.length);
       for (var product in OwnerData.productUID) {
         final List<dynamic> history =
             (await GetData.fetchProduct(product))['history'];
@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
             DateTime endDate =
                 DateTime(endTime.year, endTime.month, endTime.day);
             if (today == endDate) {
-              print('executed');
+              // print('executed');
               todayRevenue += orderInfo['pricePaid'];
             }
           }
