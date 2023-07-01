@@ -12,36 +12,48 @@ import '../utils/data_fetch.dart';
 
 double height = Dimensions.screenHeight;
 double width = Dimensions.screenWidth;
-double todayRevenue = 0.0;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  Future calculateTodayRevenue() async {
+  Future<double> calculateTodayRevenue() async {
+    double todayRevenue = 0.0;
     final DateTime now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    for(var product in OwnerData.productUID) {
-      final List<dynamic> history = (await GetData.fetchProduct(product))['history'];
-      for(var orderID in history) {
-        final Map<String, dynamic> orderInfo = await GetData.fetchOrderInfo(orderID);
-        if(orderInfo['endTimeStamp'] != null) {
-          DateTime endTime = DateTime.fromMicrosecondsSinceEpoch(orderInfo['endTimeStamp']);
-          DateTime endDate = DateTime(endTime.year, endTime.month, endTime.day);
-          if(today == endDate) {
-            todayRevenue += orderInfo['pricePaid'];
+    print('function');
+    try {
+      print(OwnerData.productUID.length);
+      for (var product in OwnerData.productUID) {
+        final List<dynamic> history =
+            (await GetData.fetchProduct(product))['history'];
+        // print(history.length);
+        for (var orderID in history) {
+          final Map<String, dynamic> orderInfo =
+              await GetData.fetchOrderInfo(orderID);
+          if (orderInfo['endTimeStamp'] != null) {
+            DateTime endTime = orderInfo['endTimeStamp'].toDate();
+            DateTime endDate =
+                DateTime(endTime.year, endTime.month, endTime.day);
+            if (today == endDate) {
+              print('executed');
+              todayRevenue += orderInfo['pricePaid'];
+            }
           }
         }
       }
+    } catch (e) {
+      Fluttertoast.showToast(msg: '$e');
     }
+    return todayRevenue;
   }
 
-  Future asyncMethod() async {
+  Future<double> asyncMethod() async {
     profileImagePath =
         'owners/${currentFirebaseUser!.uid}/profile_images/profile.jpg';
     if (!OwnerData.ownerDataSet) {
       await OwnerData.setOwnerData();
     }
-    await calculateTodayRevenue();
+    return await calculateTodayRevenue();
   }
 
   @override
@@ -69,7 +81,8 @@ class HomeScreen extends StatelessWidget {
             height: Dimensions.screenHeight / 2.5,
             width: width,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(50)),
+              borderRadius:
+                  const BorderRadius.only(bottomLeft: Radius.circular(50)),
               gradient: LinearGradient(
                 colors: [
                   Theme.of(context).colorScheme.secondary,
@@ -92,7 +105,8 @@ class HomeScreen extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    Fluttertoast.showToast(msg: 'Error occurred try again later!');
+                    Fluttertoast.showToast(
+                        msg: 'Error occurred try again later!');
                     return Center(
                       child: Column(
                         children: [
@@ -108,7 +122,8 @@ class HomeScreen extends StatelessWidget {
                             'Error occurred try again later...',
                             style: TextStyle(
                               fontSize: 35,
-                              color: Theme.of(context).textTheme.bodyLarge!.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
                             ),
                           ),
                         ],
@@ -123,7 +138,10 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               'Hello ${OwnerData.name}',
                               style: TextStyle(
-                                color: Theme.of(context).textTheme.displayMedium!.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .displayMedium!
+                                    .color,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -141,7 +159,8 @@ class HomeScreen extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     width: 3,
                                   ),
                                   borderRadius: BorderRadius.circular(18),
@@ -168,7 +187,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "\u{20B9} $todayRevenue",
+                          "\u{20B9} ${snapshot.data}",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 40,
@@ -229,7 +248,8 @@ class HomeScreen extends StatelessWidget {
                           Text(
                             "Customers",
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -287,7 +307,10 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               "Products",
                               style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -350,7 +373,8 @@ class HomeScreen extends StatelessWidget {
                           Text(
                             "Statistics",
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -408,7 +432,10 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               "Net revenue",
                               style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyLarge!.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .color,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
