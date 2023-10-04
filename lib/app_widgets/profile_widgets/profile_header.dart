@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rental_owner/global/current_owner_data.dart';
+import 'package:provider/provider.dart';
+// import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
+import 'package:rental_owner/prvoider_classes/profile_provider.dart';
 
 class ProfileHeader extends StatelessWidget {
   ProfileHeader({super.key});
@@ -8,6 +10,11 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
+    // print(profileProvider.profileImageURL);
+    // print(OwnerData.profileImageURL);
+    // return Consumer<ProfileProvider>(
+    //   builder: (context, profileProvider, _) {
     return Container(
       padding: EdgeInsets.only(top: height / 40),
       height: height / 3.5,
@@ -17,7 +24,7 @@ class ProfileHeader extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(height),
             child: Image.network(
-              OwnerData.profileImageURL,
+              profileProvider.profileImageURL,
               height: height / 8,
             ),
           ),
@@ -25,7 +32,7 @@ class ProfileHeader extends StatelessWidget {
             height: 15,
           ),
           Text(
-            OwnerData.name,
+            profileProvider.name,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: height / 45,
@@ -37,7 +44,7 @@ class ProfileHeader extends StatelessWidget {
             height: 5,
           ),
           Text(
-            OwnerData.email,
+            profileProvider.email,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: height / 55,
@@ -48,5 +55,7 @@ class ProfileHeader extends StatelessWidget {
         ],
       ),
     );
+    //   },
+    // );
   }
 }

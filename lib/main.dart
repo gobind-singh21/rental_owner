@@ -3,6 +3,7 @@ import 'package:rental_owner/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:rental_owner/global/global.dart';
+import 'package:rental_owner/prvoider_classes/profile_provider.dart';
 import 'package:rental_owner/screens/login_screen.dart';
 import 'package:rental_owner/screens/home_screen.dart';
 import 'package:rental_owner/theme_provider.dart';
@@ -21,6 +22,9 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(preferences!),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ProfileProvider(),
+        )
       ],
       child: const MyApp(),
     ),

@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rental_owner/app_widgets/text_widgets/heading_text.dart';
 import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rental_owner/prvoider_classes/profile_provider.dart';
 import 'package:rental_owner/utils/auth.dart';
 import 'package:rental_owner/utils/cropper.dart';
 import 'dart:io';
@@ -70,7 +72,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     TextEditingController passwordController = TextEditingController();
 
     AlertDialog alert = AlertDialog(
-      title: HeadingText('Enter your password', 20, null, Theme.of(context).textTheme.bodyLarge!.color,),
+      title: HeadingText(
+        'Enter your password',
+        20,
+        null,
+        Theme.of(context).textTheme.bodyLarge!.color,
+      ),
       content: TextField(
         scrollPhysics: const BouncingScrollPhysics(),
         controller: passwordController,
@@ -140,11 +147,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left_rounded, size: 35,),
+          icon: const Icon(
+            Icons.chevron_left_rounded,
+            size: 35,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.transparent,
@@ -164,9 +175,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             heroTag: 'updateUserInformation',
             onPressed: () async {
               await updateUserInformation();
-              if (validated) {
-                Navigator.of(context).pop();
-              }
+              // if (validated) {
+              //   Navigator.of(context).pop();
+              // }
+              profileProvider.updateData();
             },
             child: const Icon(Icons.check_outlined),
           ),

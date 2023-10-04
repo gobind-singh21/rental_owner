@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:rental_owner/global/current_owner_data.dart';
 import 'package:rental_owner/global/dimensions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rental_owner/prvoider_classes/profile_provider.dart';
 import 'package:rental_owner/screens/product_screens/add_product_screens/add_product_screen.dart';
 import 'package:rental_owner/screens/product_screens/show_all_product_screen/show_all_products.dart';
 import 'package:rental_owner/screens/profile_screen.dart';
 import 'package:rental_owner/global/global.dart';
+import 'package:rental_owner/screens/recent_orders.dart';
 import 'package:rental_owner/screens/revenue_screens/total_revenue_screen.dart';
 import '../utils/data_fetch.dart';
 
@@ -20,13 +23,10 @@ class HomeScreen extends StatelessWidget {
     double todayRevenue = 0.0;
     final DateTime now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    // print('function');
     try {
-      // print(OwnerData.productUID.length);
       for (var product in OwnerData.productUID) {
         final List<dynamic> history =
             (await GetData.fetchProduct(product))['history'];
-        // print(history.length);
         for (var orderID in history) {
           final Map<String, dynamic> orderInfo =
               await GetData.fetchOrderInfo(orderID);
@@ -35,7 +35,6 @@ class HomeScreen extends StatelessWidget {
             DateTime endDate =
                 DateTime(endTime.year, endTime.month, endTime.day);
             if (today == endDate) {
-              // print('executed');
               todayRevenue += orderInfo['pricePaid'];
             }
           }
@@ -58,6 +57,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(OwnerData.profileImageURL);
+    // ProfileProvider profileProvider = Provider.of<ProfileProvider>(
+    //   context,
+    // );
+    // print(profileProvider.profileImageURL);
     return Scaffold(
       floatingActionButton: InkWell(
         onTap: () => Navigator.push(context,
@@ -99,104 +103,109 @@ class HomeScreen extends StatelessWidget {
                 right: 40,
                 bottom: 60,
               ),
-              child: FutureBuilder(
-                future: asyncMethod(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    Fluttertoast.showToast(
-                        msg: 'Error occurred try again later!');
-                    return Center(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.error_rounded,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 50,
-                          ),
-                          SizedBox(
-                            height: height / 80,
-                          ),
-                          Text(
-                            'Error occurred try again later...',
-                            style: TextStyle(
-                              fontSize: 35,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge!.color,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+              child: Consumer<ProfileProvider>(
+                builder: (context, profileProvider, _) => FutureBuilder(
+                  future: asyncMethod(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      Fluttertoast.showToast(
+                          msg: 'Error occurred try again later!');
+                      return Center(
+                        child: Column(
                           children: [
+                            Icon(
+                              Icons.error_rounded,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 50,
+                            ),
+                            SizedBox(
+                              height: height / 80,
+                            ),
                             Text(
-                              'Hello ${OwnerData.name}',
+                              'Error occurred try again later...',
                               style: TextStyle(
+                                fontSize: 35,
                                 color: Theme.of(context)
                                     .textTheme
-                                    .displayMedium!
+                                    .bodyLarge!
                                     .color,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Expanded(
-                              child: SizedBox(),
-                            ),
-                            InkWell(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
-                                ),
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    width: 3,
-                                  ),
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(
-                                    OwnerData.profileImageURL,
-                                    height: height / 15,
-                                  ),
-                                ),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: height / 10,
-                        ),
-                        const Text(
-                          "Today's revenue",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Hello ${profileProvider.name}',
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .displayMedium!
+                                      .color,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Expanded(
+                                child: SizedBox(),
+                              ),
+                              InkWell(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(),
+                                  ),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      width: 3,
+                                    ),
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.network(
+                                      profileProvider.profileImageURL,
+                                      height: height / 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          "\u{20B9} ${snapshot.data}",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
+                          SizedBox(
+                            height: height / 10,
                           ),
-                        ),
-                      ],
-                    );
-                  }
-                },
+                          const Text(
+                            "Today's revenue",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            "\u{20B9} ${snapshot.data}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -209,56 +218,69 @@ class HomeScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  height: Dimensions.screenHeight / 5,
-                  width: Dimensions.screenHeight / 5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).cardColor,
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecentOrdersScreen(),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.blue.shade600,
-                              Colors.blue.shade300,
-                            ],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 22,
-                          backgroundColor: Colors.transparent,
-                          child: Icon(
-                            Icons.people_rounded,
-                            color: Theme.of(context).iconTheme.color,
-                            // color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Expanded(child: SizedBox()),
-                      Row(
-                        children: [
-                          Text(
-                            "Customers",
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge?.color,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    height: Dimensions.screenHeight / 5,
+                    width: Dimensions.screenHeight / 5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.blue.shade600,
+                                Colors.blue.shade300,
+                              ],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
                             ),
                           ),
-                          const Expanded(child: SizedBox()),
-                          const Icon(Icons.chevron_right_rounded)
-                        ],
-                      ),
-                    ],
+                          child: CircleAvatar(
+                            radius: 22,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              Icons.history_rounded,
+                              color: Theme.of(context).iconTheme.color,
+                              // color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const Expanded(child: SizedBox()),
+                        Row(
+                          children: [
+                            Text(
+                              "Recent Orders",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.color,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Expanded(child: SizedBox()),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              size: 20,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Expanded(child: SizedBox()),

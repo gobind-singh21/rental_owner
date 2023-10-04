@@ -26,8 +26,6 @@ class TotalRevenueScreen extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        // backgroundColor: Colors.transparent,
-        // shadowColor: Colors.transparent,
         title: HeadingText(
           'Total Revenue',
           20,
@@ -55,7 +53,11 @@ class TotalRevenueScreen extends StatelessWidget {
               }
               return Container(
                 margin: const EdgeInsets.only(
-                    bottom: 10, top: 10, left: 15, right: 15),
+                  bottom: 10,
+                  top: 10,
+                  left: 15,
+                  right: 15,
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -104,7 +106,10 @@ class TotalRevenueScreen extends StatelessWidget {
                                     prodData['name'],
                                     15,
                                     TextOverflow.ellipsis,
-                                    Theme.of(context).textTheme.bodyLarge!.color,
+                                    Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .color,
                                   ),
                                   const SizedBox(
                                     width: 4,
@@ -143,7 +148,10 @@ class TotalRevenueScreen extends StatelessWidget {
                                 "\u{20B9}${prodData['pricePerHour']} / hr",
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -166,7 +174,10 @@ class TotalRevenueScreen extends StatelessWidget {
                                     'Total Revenue : ${prodData['totalRevenue']}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).textTheme.displayMedium!.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium!
+                                          .color,
                                     ),
                                   ),
                                 ),
